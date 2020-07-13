@@ -1,0 +1,40 @@
+version: '3'
+services:
+  app:
+    build:
+      context: docker
+      dockerfile: app/Dockerfile
+    working_dir: /var/www/html
+    volumes:
+      - ./src:/var/www/html
+    links:
+      - database
+    depends_on:
+      - database
+  nginx:
+    build:
+      context: ./
+      dockerfile: docker/nginx/Dockerfile
+    working_dir: /var/www
+    ports:
+      - 8088:80
+    volumes:
+      - ./src:/var/www
+    depends_on:
+      - app
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - 1025:1025
+      - 8025:8025
+    depends_on:
+      - database
+  database:
+    container_name: laravel_mysql
+    volumes:
+      - ./docker/db/mysql:/var/lib/mysql
+    build:
+      context: docker
+      dockerfile: db/Dockerfile
+    ports:
+      - 3306:3306

@@ -1,0 +1,9 @@
+FROM mysql:8.0
+
+ENV TZ=UTC \
+  MYSQL_ROOT_PASSWORD=root \
+  MYSQL_USER=default \
+  MYSQL_PASSWORD=secret \
+  MYSQL_DATABASE=default
+
+EXPOSE 3306
